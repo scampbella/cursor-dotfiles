@@ -1,125 +1,61 @@
-# Cursor Extension Sync
+﻿# Cursor Extensions Sync
 
-This repository helps you sync your Cursor IDE extensions, settings, and keybindings across different devices using GitHub.
+A lightweight Python tool to sync Cursor extensions and settings across different installations.
 
-## Features
+## Why This Exists
 
-- ✅ Sync extensions across Mac, Windows, and Linux
-- ✅ Export/import settings and keybindings
-- ✅ Cross-platform scripts (Bash for Mac/Linux, Batch for Windows)
-- ✅ Easy-to-use command-line interface
+Cursor doesn't have built-in extension syncing like VS Code. This tool solves that by:
+- Storing only extension IDs (not binary files) - keeping the repo tiny
+- Syncing settings and keybindings
+- Working across Windows, macOS, and Linux
 
 ## Quick Start
 
-### 1. Clone this repository
+1. **Export your current setup:**
+   `ash
+   python sync_extensions.py export
+   `
 
-```bash
-git clone https://github.com/YOUR_USERNAME/cursor-dotfiles.git
-cd cursor-dotfiles
-```
+2. **On a new machine, import the setup:**
+   `ash
+   python sync_extensions.py import
+   `
 
-### 2. Export your current Cursor configuration
+3. **Check status anytime:**
+   `ash
+   python sync_extensions.py status
+   `
 
-**On Mac/Linux:**
-```bash
-chmod +x sync-extensions.sh
-./sync-extensions.sh export
-```
+## Files Managed
 
-**On Windows:**
-```cmd
-sync-extensions.bat export
-```
+- extensions.txt - List of extension IDs (lightweight text file)
+- settings.json - Cursor settings
+- keybindings.json - Cursor keybindings
 
-### 3. Commit and push to GitHub
+## Repository Size
 
-```bash
-git add .
-git commit -m "Initial Cursor configuration export"
-git push origin main
-```
+- **Before optimization:** ~1.7GB (43,131 files with binary extensions)
+- **After optimization:** ~42KB (19 files, text-only)
 
-### 4. Import on another device
+## Requirements
 
-**On Mac/Linux:**
-```bash
-./sync-extensions.sh import
-```
+- Python 3.6+
+- Cursor installed and in PATH
+- No external dependencies (uses only Python standard library)
 
-**On Windows:**
-```cmd
-sync-extensions.bat import
-```
+## Commands
 
-## Usage
+- export - Export current Cursor setup
+- import - Import and apply setup
+- status - Show current status
+- help - Show detailed help
 
-### Export Configuration
-Exports your current Cursor extensions, settings, and keybindings to the repository.
+## How It Works
 
-```bash
-# Mac/Linux
-./sync-extensions.sh export
+Instead of storing massive binary extension files, this tool:
+1. Extracts extension IDs from your current installation
+2. Stores them in a simple text file
+3. Uses Cursor's CLI to install extensions by ID
+4. Syncs settings and keybindings directly
 
-# Windows
-sync-extensions.bat export
-```
-
-### Import Configuration
-Imports extensions, settings, and keybindings from the repository to your Cursor installation.
-
-```bash
-# Mac/Linux
-./sync-extensions.sh import
-
-# Windows
-sync-extensions.bat import
-```
-
-## What Gets Synced
-
-- **Extensions**: All installed Cursor extensions
-- **Settings**: Your `settings.json` configuration
-- **Keybindings**: Your custom keybindings from `keybindings.json`
-
-## File Structure
-
-```
-cursor-dotfiles/
-├── sync-extensions.sh      # Mac/Linux sync script
-├── sync-extensions.bat     # Windows sync script
-├── extensions/             # Exported extensions
-├── settings.json          # Exported settings
-├── keybindings.json       # Exported keybindings
-├── extensions-list.txt    # List of installed extensions
-└── README.md              # This file
-```
-
-## Troubleshooting
-
-### Cursor not found
-Make sure Cursor is installed and has been run at least once to create the configuration directory.
-
-**Default locations:**
-- Mac: `~/Library/Application Support/Cursor`
-- Windows: `%APPDATA%\Cursor`
-- Linux: `~/.config/Cursor`
-
-### Extensions not working after import
-1. Restart Cursor completely
-2. Check if extensions are enabled in the Extensions panel
-3. Some extensions may need to be reinstalled if they have platform-specific dependencies
-
-### Permission issues
-Make sure the scripts have execute permissions:
-
-```bash
-chmod +x sync-extensions.sh
-```
-
-## Contributing
-
-Feel free to submit issues and enhancement requests!
-
-## License
-
-MIT License - feel free to use this for your own Cursor configuration syncing.
+This approach is much more efficient and keeps your repository lightweight while providing the same functionality.
