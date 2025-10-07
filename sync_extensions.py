@@ -142,6 +142,78 @@ class CursorExtensionSync:
             except subprocess.CalledProcessError as e:
                 print(f"  [ERROR] Warning: Failed to install {ext}: {e}")
     
+    def remove_extensions(self, extensions: List[str]) -> None:
+        """Remove extensions that are not in the repository extensions list."""
+        if not extensions:
+            print("No extensions to check for removal.")
+            return
+        
+        # Find working Cursor executable
+        cursor_paths = [
+            "cursor",  # If in PATH
+            r"C:\Program Files\cursor\resources\app\bin\cursor.cmd",  # Windows default
+            r"C:\Users\{}\AppData\Local\Programs\cursor\resources\app\bin\cursor.cmd".format(os.environ.get("USERNAME", "")),  # User install
+        ]
+        
+        cursor_path = None
+        for path in cursor_paths:
+            try:
+                subprocess.run([path, "--version"], check=True, capture_output=True)
+                cursor_path = path
+                break
+            except (subprocess.CalledProcessError, FileNotFoundError):
+                continue
+        
+        if not cursor_path:
+            print("Error: Could not find Cursor executable.")
+            return
+        
+        # Get currently installed extensions
+        print("Checking for extensions to remove...")
+        installed_extensions = self.get_installed_extensions()
+        
+        # Create a set of repository extension IDs for quick lookup
+        repo_extension_ids = set()
+        for ext in extensions:
+            ext_id = ext.split('@')[0] if '@' in ext else ext
+            repo_extension_ids.add(ext_id)
+        
+        # Find extensions to remove (installed but not in repository)
+        extensions_to_remove = []
+        for installed_ext in installed_extensions:
+            ext_id = installed_ext.split('@')[0] if '@' in installed_ext else installed_ext
+            if ext_id not in repo_extension_ids:
+                extensions_to_remove.append(installed_ext)
+        
+        if not extensions_to_remove:
+            print("No extensions need to be removed - all installed extensions are in the repository.")
+            return
+        
+        print(f"\nFound {len(extensions_to_remove)} extensions to remove:")
+        for ext in extensions_to_remove:
+            print(f"  - {ext}")
+        
+        # Ask for confirmation
+        response = input(f"\nDo you want to remove these {len(extensions_to_remove)} extensions? (y/N): ").strip().lower()
+        if response not in ['y', 'yes']:
+            print("Extension removal cancelled.")
+            return
+        
+        print(f"\nRemoving {len(extensions_to_remove)} extensions...")
+        for i, ext in enumerate(extensions_to_remove, 1):
+            print(f"[{i}/{len(extensions_to_remove)}] Removing {ext}...")
+            try:
+                subprocess.run(
+                    [cursor_path, "--uninstall-extension", ext],
+                    check=True,
+                    capture_output=True
+                )
+                print(f"  [OK] Successfully removed {ext}")
+            except subprocess.CalledProcessError as e:
+                print(f"  [ERROR] Warning: Failed to remove {ext}: {e}")
+        
+        print(f"Extension removal completed!")
+    
     def sync_settings(self) -> None:
         """Sync Cursor settings."""
         if not self.settings_file.exists():
@@ -208,6 +280,9 @@ class CursorExtensionSync:
         # Import extensions
         extensions = self.load_extensions()
         if extensions:
+            # First remove extensions that are not in the repository
+            self.remove_extensions(extensions)
+            # Then install missing extensions
             self.install_extensions(extensions)
         
         # Import settings and keybindings
@@ -246,6 +321,7 @@ def main():
         print("\nUsage:")
         print("  python sync_extensions.py export    - Export current setup")
         print("  python sync_extensions.py import    - Import and apply setup")
+        print("  python sync_extensions.py remove    - Remove extensions not in repository")
         print("  python sync_extensions.py status    - Show current status")
         print("  python sync_extensions.py help      - Show this help")
         return
@@ -256,6 +332,12 @@ def main():
         sync.export_current_setup()
     elif command == "import":
         sync.import_setup()
+    elif command == "remove":
+        extensions = sync.load_extensions()
+        if extensions:
+            sync.remove_extensions(extensions)
+        else:
+            print("No extensions found in repository to compare against.")
     elif command == "status":
         sync.show_status()
     elif command == "help":
@@ -264,6 +346,7 @@ def main():
         print("\nCommands:")
         print("  export  - Export your current Cursor setup (extensions, settings, keybindings)")
         print("  import  - Import and apply a previously exported setup")
+        print("  remove  - Remove extensions that are not in the repository")
         print("  status  - Show the current status of your Cursor installation")
         print("  help    - Show this help message")
         print("\nFiles managed:")
