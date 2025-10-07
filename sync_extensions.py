@@ -76,7 +76,7 @@ class CursorExtensionSync:
             return [line.strip() for line in f.readlines() if line.strip()]
     
     def install_extensions(self, extensions: List[str]) -> None:
-        """Install extensions from list."""
+        """Install extensions from list, skipping already installed ones."""
         if not extensions:
             print("No extensions to install.")
             return
@@ -101,17 +101,46 @@ class CursorExtensionSync:
             print("Error: Could not find Cursor executable.")
             return
         
-        print(f"Installing {len(extensions)} extensions...")
-        for i, ext in enumerate(extensions, 1):
-            print(f"[{i}/{len(extensions)}] Installing {ext}...")
+        # Get currently installed extensions
+        print("Checking for already installed extensions...")
+        installed_extensions = self.get_installed_extensions()
+        
+        # Filter out already installed extensions
+        extensions_to_install = []
+        already_installed = []
+        
+        for ext in extensions:
+            # Check if extension is already installed (with or without version)
+            ext_id = ext.split('@')[0] if '@' in ext else ext
+            is_installed = any(installed_ext.split('@')[0] == ext_id for installed_ext in installed_extensions)
+            
+            if is_installed:
+                already_installed.append(ext)
+            else:
+                extensions_to_install.append(ext)
+        
+        # Report status
+        if already_installed:
+            print(f"[OK] {len(already_installed)} extensions already installed:")
+            for ext in already_installed:
+                print(f"  - {ext}")
+        
+        if not extensions_to_install:
+            print("All extensions are already installed!")
+            return
+        
+        print(f"\nInstalling {len(extensions_to_install)} new extensions...")
+        for i, ext in enumerate(extensions_to_install, 1):
+            print(f"[{i}/{len(extensions_to_install)}] Installing {ext}...")
             try:
                 subprocess.run(
                     [cursor_path, "--install-extension", ext],
                     check=True,
                     capture_output=True
                 )
+                print(f"  [OK] Successfully installed {ext}")
             except subprocess.CalledProcessError as e:
-                print(f"Warning: Failed to install {ext}: {e}")
+                print(f"  [ERROR] Warning: Failed to install {ext}: {e}")
     
     def sync_settings(self) -> None:
         """Sync Cursor settings."""
