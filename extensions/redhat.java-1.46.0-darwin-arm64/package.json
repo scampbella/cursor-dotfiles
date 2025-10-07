@@ -2059,14 +2059,15 @@
 	"__metadata": {
 		"id": "198a707e-28af-4e84-8610-6e2f628dd12d",
 		"publisherId": "eed56242-9699-4317-8bc7-e9f4b9bdd3ff",
-		"publisherDisplayName": "Red Hat",
+		"publisherDisplayName": "redhat",
 		"targetPlatform": "darwin-arm64",
 		"isApplicationScoped": false,
 		"isPreReleaseVersion": false,
 		"hasPreReleaseVersion": false,
-		"installedTimestamp": 1759874832392,
+		"installedTimestamp": 1759874870796,
 		"pinned": false,
 		"preRelease": false,
-		"source": "gallery"
+		"source": "gallery",
+		"size": 181132766
 	}
 }

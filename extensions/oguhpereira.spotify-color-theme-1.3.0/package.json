@@ -1,0 +1,77 @@
+{
+	"name": "spotify-color-theme",
+	"displayName": "Spotify Theme",
+	"description": "Theme for vscode inspired by the colors of Spotify",
+	"version": "1.3.0",
+	"license": "MIT",
+	"scripts": {
+		"build": "node ./scripts/build.js",
+		"lint": "node ./scripts/lint.js",
+		"package": "vsce package -o ./bin/spotify.vsix",
+		"vscode:prepublish": "npm run build",
+		"vsce-publish": "vsce publish"
+	},
+	"engines": {
+		"vscode": "^1.21.0"
+	},
+	"bugs": {
+		"url": "https://github.com/oguhpereira/vscode-spotify-theme/issues"
+	},
+	"categories": [
+		"Themes"
+	],
+	"maintainers": [
+		"Gustavo Pereira"
+	],
+	"keywords": [
+		"spotify",
+		"Spotify",
+		"spotify-theme",
+		"theme",
+		"dark"
+	],
+	"icon": "icon.png",
+	"galleryBanner": {
+		"color": "#121212",
+		"theme": "dark"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/oguhpereira/vscode-spotify-theme"
+	},
+	"contributes": {
+		"themes": [
+			{
+				"label": "Spotify Theme",
+				"uiTheme": "vs-dark",
+				"path": "./theme/spotify.json"
+			},
+			{
+				"label": "Spotify Theme Soft",
+				"uiTheme": "vs-dark",
+				"path": "./theme/spotify-soft.json"
+			}
+		]
+	},
+	"publisher": "oguhpereira",
+	"devDependencies": {
+		"js-yaml": "^3.13.1",
+		"prettier": "^1.19.1",
+		"tinycolor2": "^1.4.1",
+		"vsce": "^1.71.0"
+	},
+	"__metadata": {
+		"publisherDisplayName": "oguhpereira",
+		"publisherId": "a1336fdd-52cd-4eb7-9dae-659208a5c983",
+		"id": "2fe23fc1-a83e-4ed4-82d6-d1529fdc9d9b",
+		"targetPlatform": "undefined",
+		"isApplicationScoped": false,
+		"isPreReleaseVersion": false,
+		"hasPreReleaseVersion": false,
+		"installedTimestamp": 1746066923418,
+		"pinned": false,
+		"preRelease": false,
+		"source": "gallery",
+		"size": 428866
+	}
+}

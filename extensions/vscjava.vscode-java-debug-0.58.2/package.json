@@ -1029,9 +1029,10 @@
 		"isApplicationScoped": false,
 		"isPreReleaseVersion": false,
 		"hasPreReleaseVersion": false,
-		"installedTimestamp": 1758739259147,
+		"installedTimestamp": 1745949431519,
 		"pinned": false,
 		"preRelease": false,
-		"source": "gallery"
+		"source": "gallery",
+		"size": 3874175
 	}
 }

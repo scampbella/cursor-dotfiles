@@ -1,0 +1,40 @@
+{
+	"name": "fakedonalds",
+	"displayName": "FakeDonald's",
+	"publisher": "SamuelePignone",
+	"description": "A mcdonald's inspired theme for all satanic programmers and fast food lovers",
+	"version": "0.0.1",
+	"author": {
+		"name": "sam"
+	},
+	"icon": "images/fakedonalds.png",
+	"engines": {
+		"vscode": "^1.66.0"
+	},
+	"categories": [
+		"Themes"
+	],
+	"contributes": {
+		"themes": [
+			{
+				"label": "FakeDonald's",
+				"uiTheme": "vs",
+				"path": "./themes/FakeDonald's-color-theme.json"
+			}
+		]
+	},
+	"__metadata": {
+		"id": "655ebd88-12e8-47d2-861c-c87f7e0d558a",
+		"publisherId": "6a9038a1-2f97-43ad-b1eb-2e0c3e04b4e4",
+		"publisherDisplayName": "SamuelePignone",
+		"targetPlatform": "undefined",
+		"isApplicationScoped": false,
+		"isPreReleaseVersion": false,
+		"hasPreReleaseVersion": false,
+		"installedTimestamp": 1746063354126,
+		"pinned": false,
+		"preRelease": false,
+		"source": "gallery",
+		"size": 66397
+	}
+}

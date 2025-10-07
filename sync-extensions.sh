@@ -28,11 +28,11 @@ print_error() {
 if [[ "$OSTYPE" == "darwin"* ]]; then
     OS="mac"
     CURSOR_CONFIG_DIR="$HOME/Library/Application Support/Cursor"
-    CURSOR_EXTENSIONS_DIR="$HOME/.vscode/extensions"
+    CURSOR_EXTENSIONS_DIR="$HOME/.cursor/extensions"
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
     OS="linux"
     CURSOR_CONFIG_DIR="$HOME/.config/Cursor"
-    CURSOR_EXTENSIONS_DIR="$HOME/.vscode/extensions"
+    CURSOR_EXTENSIONS_DIR="$HOME/.cursor/extensions"
 else
     print_error "Unsupported operating system: $OSTYPE"
     exit 1

@@ -13,10 +13,12 @@ if "%~1"=="" (
 
 REM Detect Cursor config directory
 set "CURSOR_CONFIG_DIR=%APPDATA%\Cursor"
-set "CURSOR_EXTENSIONS_DIR=%USERPROFILE%\.vscode\extensions"
+set "CURSOR_EXTENSIONS_DIR=%USERPROFILE%\.cursor\extensions"
 
 REM Check if extensions exist in Cursor's own directory first
-if exist "%CURSOR_CONFIG_DIR%\User\extensions" (
+if exist "%USERPROFILE%\.cursor\extensions" (
+    set "CURSOR_EXTENSIONS_DIR=%USERPROFILE%\.cursor\extensions"
+) else if exist "%CURSOR_CONFIG_DIR%\User\extensions" (
     set "CURSOR_EXTENSIONS_DIR=%CURSOR_CONFIG_DIR%\User\extensions"
 ) else if exist "%USERPROFILE%\.vscode\extensions" (
     set "CURSOR_EXTENSIONS_DIR=%USERPROFILE%\.vscode\extensions"
