@@ -28,9 +28,11 @@ print_error() {
 if [[ "$OSTYPE" == "darwin"* ]]; then
     OS="mac"
     CURSOR_CONFIG_DIR="$HOME/Library/Application Support/Cursor"
+    CURSOR_EXTENSIONS_DIR="$HOME/.vscode/extensions"
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
     OS="linux"
     CURSOR_CONFIG_DIR="$HOME/.config/Cursor"
+    CURSOR_EXTENSIONS_DIR="$HOME/.vscode/extensions"
 else
     print_error "Unsupported operating system: $OSTYPE"
     exit 1
@@ -51,8 +53,8 @@ export_extensions() {
     mkdir -p extensions
     
     # Copy extensions folder
-    if [ -d "$CURSOR_CONFIG_DIR/User/extensions" ]; then
-        cp -r "$CURSOR_CONFIG_DIR/User/extensions"/* extensions/ 2>/dev/null || true
+    if [ -d "$CURSOR_EXTENSIONS_DIR" ]; then
+        cp -r "$CURSOR_EXTENSIONS_DIR"/* extensions/ 2>/dev/null || true
         print_status "Extensions exported to ./extensions/"
     else
         print_warning "No extensions found to export"
@@ -92,8 +94,8 @@ import_extensions() {
     
     # Import extensions
     if [ -d "extensions" ]; then
-        mkdir -p "$CURSOR_CONFIG_DIR/User/extensions"
-        cp -r extensions/* "$CURSOR_CONFIG_DIR/User/extensions/" 2>/dev/null || true
+        mkdir -p "$CURSOR_EXTENSIONS_DIR"
+        cp -r extensions/* "$CURSOR_EXTENSIONS_DIR/" 2>/dev/null || true
         print_status "Extensions imported from ./extensions/"
     else
         print_warning "No extensions directory found to import"

@@ -13,6 +13,7 @@ if "%~1"=="" (
 
 REM Detect Cursor config directory
 set "CURSOR_CONFIG_DIR=%APPDATA%\Cursor"
+set "CURSOR_EXTENSIONS_DIR=%USERPROFILE%\.vscode\extensions"
 
 REM Check if Cursor is installed
 if not exist "%CURSOR_CONFIG_DIR%" (
@@ -38,8 +39,8 @@ REM Create extensions directory if it doesn't exist
 if not exist "extensions" mkdir extensions
 
 REM Copy extensions folder
-if exist "%CURSOR_CONFIG_DIR%\User\extensions" (
-    xcopy "%CURSOR_CONFIG_DIR%\User\extensions\*" "extensions\" /E /I /Y >nul 2>&1
+if exist "%CURSOR_EXTENSIONS_DIR%" (
+    xcopy "%CURSOR_EXTENSIONS_DIR%\*" "extensions\" /E /I /Y >nul 2>&1
     echo [INFO] Extensions exported to .\extensions\
 ) else (
     echo [WARNING] No extensions found to export
@@ -78,8 +79,8 @@ if not exist "%CURSOR_CONFIG_DIR%\User" mkdir "%CURSOR_CONFIG_DIR%\User"
 
 REM Import extensions
 if exist "extensions" (
-    if not exist "%CURSOR_CONFIG_DIR%\User\extensions" mkdir "%CURSOR_CONFIG_DIR%\User\extensions"
-    xcopy "extensions\*" "%CURSOR_CONFIG_DIR%\User\extensions\" /E /I /Y >nul 2>&1
+    if not exist "%CURSOR_EXTENSIONS_DIR%" mkdir "%CURSOR_EXTENSIONS_DIR%"
+    xcopy "extensions\*" "%CURSOR_EXTENSIONS_DIR%\" /E /I /Y >nul 2>&1
     echo [INFO] Extensions imported from .\extensions\
 ) else (
     echo [WARNING] No extensions directory found to import
