@@ -38,17 +38,27 @@ class CursorExtensionSync:
     
     def get_installed_extensions(self) -> List[str]:
         """Get list of currently installed extensions."""
-        try:
-            result = subprocess.run(
-                ["cursor", "--list-extensions", "--show-versions"],
-                capture_output=True,
-                text=True,
-                check=True
-            )
-            return [line.strip() for line in result.stdout.splitlines() if line.strip()]
-        except (subprocess.CalledProcessError, FileNotFoundError):
-            print("Error: Could not run 'cursor --list-extensions'. Make sure Cursor is installed and in PATH.")
-            return []
+        # Try different possible locations for Cursor executable
+        cursor_paths = [
+            "cursor",  # If in PATH
+            r"C:\Program Files\cursor\resources\app\bin\cursor.cmd",  # Windows default
+            r"C:\Users\{}\AppData\Local\Programs\cursor\resources\app\bin\cursor.cmd".format(os.environ.get("USERNAME", "")),  # User install
+        ]
+        
+        for cursor_path in cursor_paths:
+            try:
+                result = subprocess.run(
+                    [cursor_path, "--list-extensions", "--show-versions"],
+                    capture_output=True,
+                    text=True,
+                    check=True
+                )
+                return [line.strip() for line in result.stdout.splitlines() if line.strip()]
+            except (subprocess.CalledProcessError, FileNotFoundError):
+                continue
+        
+        print("Error: Could not run 'cursor --list-extensions'. Make sure Cursor is installed and accessible.")
+        return []
     
     def save_extensions(self, extensions: List[str]) -> None:
         """Save extension list to file."""
@@ -71,12 +81,32 @@ class CursorExtensionSync:
             print("No extensions to install.")
             return
         
+        # Find working Cursor executable
+        cursor_paths = [
+            "cursor",  # If in PATH
+            r"C:\Program Files\cursor\resources\app\bin\cursor.cmd",  # Windows default
+            r"C:\Users\{}\AppData\Local\Programs\cursor\resources\app\bin\cursor.cmd".format(os.environ.get("USERNAME", "")),  # User install
+        ]
+        
+        cursor_path = None
+        for path in cursor_paths:
+            try:
+                subprocess.run([path, "--version"], check=True, capture_output=True)
+                cursor_path = path
+                break
+            except (subprocess.CalledProcessError, FileNotFoundError):
+                continue
+        
+        if not cursor_path:
+            print("Error: Could not find Cursor executable.")
+            return
+        
         print(f"Installing {len(extensions)} extensions...")
         for i, ext in enumerate(extensions, 1):
             print(f"[{i}/{len(extensions)}] Installing {ext}...")
             try:
                 subprocess.run(
-                    ["cursor", "--install-extension", ext],
+                    [cursor_path, "--install-extension", ext],
                     check=True,
                     capture_output=True
                 )
