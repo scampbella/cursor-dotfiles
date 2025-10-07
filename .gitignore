@@ -1,0 +1,14 @@
+# Ignore temporary files
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Ignore logs
+*.log
+
+# Keep the extensions directory structure but ignore large files
+extensions/*/bin/
+extensions/*/out/
+extensions/*/node_modules/
+extensions/*/.vscode/
