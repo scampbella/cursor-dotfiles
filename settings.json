@@ -13,5 +13,6 @@
     "terminal.integrated.defaultProfile.osx": "zsh",
     "workbench.colorTheme": "Spotify Theme",
     "explorer.confirmDragAndDrop": false,
-    "git.openRepositoryInParentFolders": "always"
+    "git.openRepositoryInParentFolders": "always",
+    "git.confirmSync": false
 }
