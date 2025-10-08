@@ -1,7 +1,6 @@
 anysphere.cursorpyright@1.0.9
 anysphere.pyright@1.1.327
 ecmel.vscode-html-css@2.0.13
-formulahendry.code-runner@0.12.2
 mechatroner.rainbow-csv@3.19.0
 ms-azuretools.vscode-docker@2.0.0
 ms-python.debugpy@2025.10.0
