@@ -59,3 +59,4 @@ Instead of storing massive binary extension files, this tool:
 4. Syncs settings and keybindings directly
 
 This approach is much more efficient and keeps your repository lightweight while providing the same functionality.
+
